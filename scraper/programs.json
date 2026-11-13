@@ -1,0 +1,173 @@
+{
+  "_comment": "Seasonal / annual recruitment programs, edited by hand. 'window' = latest known registration period (YYYY-MM-DD, either side may be null). 'auto' = name of a checker in programs.py that reads the official site on every run (null = manual only). 'checked' = when the manual info was last verified.",
+  "programs": [
+    {
+      "id": "maganghub",
+      "name": "MagangHub – Program Magang Nasional",
+      "organizer": "Kemnaker (Ministry of Manpower)",
+      "category": "Government internship",
+      "url": "https://maganghub.kemnaker.go.id/",
+      "auto": "maganghub",
+      "summary": "National paid internship for fresh graduates at partner companies and government agencies, 6 months.",
+      "eligibility": [
+        "Fresh graduate D3 / D4 / S1, graduated at most 1 year ago",
+        "Indonesian citizen with an active NIK",
+        "SIAPkerja account"
+      ],
+      "benefit": "Monthly allowance equal to the local minimum wage",
+      "usual_schedule": "Several batches a year (2026: July, September, late October)",
+      "window": {"from": "2026-10-27", "until": "2026-11-04", "label": "Batch 3 (Angkatan II) participant registration"},
+      "checked": "2026-11-12",
+      "sources": [
+        "https://infopublik.id/kategori/nasional-ekonomi-bisnis/994722/kemnaker-buka-pendaftaran-maganghub-batch-3-mulai-27-oktober-2026-cek-jadwal-dan-syaratnya",
+        "https://setkab.go.id/program-magang-nasional-2026-resmi-dibuka-pemerintah-siapkan-150-ribu-kesempatan-bagi-lulusan-perguruan-tinggi/"
+      ]
+    },
+    {
+      "id": "magenta",
+      "name": "MAGENTA – Magang Generasi Bertalenta BUMN",
+      "organizer": "Kementerian BUMN",
+      "category": "BUMN",
+      "url": "https://magentaku.id/lowongan/magang",
+      "auto": "magenta",
+      "summary": "Internships at state-owned companies. Each company opens its own postings throughout the year.",
+      "eligibility": [
+        "Students and fresh graduates D3 / D4 / S1 / S2",
+        "Each posting sets its own requirements"
+      ],
+      "benefit": "Allowance depends on the company",
+      "usual_schedule": "Rolling – postings open all year",
+      "window": null,
+      "checked": "2026-11-12",
+      "sources": ["https://dealls.com/pengembangan-karir/magenta-bumn"]
+    },
+    {
+      "id": "rbb",
+      "name": "Rekrutmen Bersama BUMN (RBB)",
+      "organizer": "FHCI / Kementerian BUMN",
+      "category": "BUMN",
+      "url": "https://rekrutmenbersama.fhcibumn.id/",
+      "auto": null,
+      "summary": "Joint recruitment for permanent positions at many state-owned companies.",
+      "eligibility": ["Requirements differ per company and position – see the official announcement"],
+      "benefit": "Permanent position",
+      "usual_schedule": "Once a year; 2025 opened 7 March. 2026 dates were not confirmed in news sources.",
+      "window": null,
+      "note": "The official site can't be read automatically (SSL error), so check it yourself.",
+      "checked": "2026-11-12",
+      "sources": [
+        "https://www.kompas.tv/info-publik/578222/rekrutmen-bersama-bumn-2025-resmi-dibuka-7-maret-2025-ini-jadwal-dan-syaratnya",
+        "https://glints.com/id/lowongan/jadwal-rekrutmen-bersama-bumn-2026/"
+      ]
+    },
+    {
+      "id": "casn",
+      "name": "CPNS & PPPK (civil servant selection)",
+      "organizer": "BKN / KemenPANRB",
+      "category": "CPNS / PPPK",
+      "url": "https://sscasn.bkn.go.id/",
+      "auto": "sscasn",
+      "summary": "Civil servant selection through SSCASN. IT formations include Pranata Komputer.",
+      "eligibility": [
+        "Indonesian citizen",
+        "CPNS: usually age 18–35 at the close of registration",
+        "Education and major depend on the formation",
+        "PPPK: check whether a formation is open to the general public"
+      ],
+      "benefit": "Civil servant status",
+      "usual_schedule": "Varies per year. As of October 2026 the general CPNS 2026 schedule had not been announced.",
+      "window": null,
+      "checked": "2026-11-12",
+      "sources": ["https://www.industry.co.id/read/157030/cpns-2026-kapan-dibuka-update-terbaru-oktober-status-formasi-160-ribu-dan-cara-daftar-sscasn"]
+    },
+    {
+      "id": "bca-magang-bakti",
+      "name": "Magang Bakti BCA",
+      "organizer": "Bank Central Asia",
+      "category": "Bank & institution",
+      "url": "https://karir.bca.co.id/magang-bakti",
+      "auto": "bca",
+      "summary": "Paid frontliner internship (Customer Service / Teller). Not an IT role.",
+      "eligibility": [
+        "SMA/SMK up to S1 graduates",
+        "Age 18–24, unmarried, never joined Magang Bakti before",
+        "CS Pembukaan Rekening Online: D3/S1 with GPA ≥ 2.50, placement in Serpong, Tangerang or Semarang"
+      ],
+      "benefit": "Allowance, training and certificate",
+      "usual_schedule": "Open most of the year",
+      "window": {"from": "2025-12-23", "until": "2026-12-31", "label": "2026 program (per news reports)"},
+      "checked": "2026-11-12",
+      "sources": [
+        "https://www.kompas.tv/ekonomi/679501/lowongan-kerja-magang-bakti-bca-2026-dibuka-simak-posisi-syarat-dan-cara-daftarnya",
+        "https://finance.detik.com/lainnya/d-7809671/bca-buka-lowongan-magang-buat-lulusan-sma-hingga-s1-simak-syaratnya"
+      ]
+    },
+    {
+      "id": "bri",
+      "name": "BRI – Brilian Banking Associate Program (BBAP)",
+      "organizer": "Bank Rakyat Indonesia",
+      "category": "Bank & institution",
+      "url": "https://e-recruitment.bri.co.id/",
+      "auto": "bri",
+      "summary": "BRI's e-recruitment portal. BBAP is its entry program, posted per region.",
+      "eligibility": ["See each posting on the portal"],
+      "benefit": null,
+      "usual_schedule": "Regional postings throughout the year",
+      "window": null,
+      "checked": "2026-11-12",
+      "sources": []
+    },
+    {
+      "id": "bni-odp",
+      "name": "BNI Officer / Assistant Development Program (ODP / ADP)",
+      "organizer": "Bank Negara Indonesia",
+      "category": "Bank & institution",
+      "url": "https://www.kalibrr.com/c/pt-bank-negara-indonesia-persero-tbk/jobs",
+      "auto": "bni",
+      "summary": "BNI's graduate development programs, posted on Kalibrr. Has had an IT track.",
+      "eligibility": ["S1 / S2 fresh graduates (per 2026 postings)"],
+      "benefit": null,
+      "usual_schedule": "Several rounds a year (2026 rounds closed 26 April and 21 September)",
+      "window": {"from": null, "until": "2026-09-21", "label": "Latest ODP round"},
+      "checked": "2026-11-12",
+      "sources": [
+        "https://www.metrotvnews.com/read/NxGCP1QO-bni-buka-lowongan-odp-2026-berikut-cara-daftarnya",
+        "https://www.detik.com/edu/detikpedia/d-8177267/bni-buka-lowongan-kerja-untuk-fresh-graduate-ini-syaratnya"
+      ]
+    },
+    {
+      "id": "mandiri-odp",
+      "name": "Bank Mandiri Officer Development Program (ODP)",
+      "organizer": "Bank Mandiri",
+      "category": "Bank & institution",
+      "url": "https://sasbar.fib.ugm.ac.id/en/national-hiring-odp-mandiri-2026-officially-open/",
+      "auto": null,
+      "summary": "Mandiri's graduate officer program, including an IT track. Recruited through a national hiring round.",
+      "eligibility": ["Fresh graduates – see the official announcement"],
+      "benefit": null,
+      "usual_schedule": "National hiring early in the year (2026: registration until 6 March)",
+      "window": {"from": null, "until": "2026-03-06", "label": "National Hiring ODP 2026"},
+      "note": "No official page that can be read automatically was found; the link is a university announcement.",
+      "checked": "2026-11-12",
+      "sources": ["https://sasbar.fib.ugm.ac.id/en/national-hiring-odp-mandiri-2026-officially-open/"]
+    },
+    {
+      "id": "bi-pcpm",
+      "name": "PCPM Bank Indonesia",
+      "organizer": "Bank Indonesia",
+      "category": "Bank & institution",
+      "url": "https://www.bi.go.id/id/karier/default.aspx",
+      "auto": "bi_pcpm",
+      "summary": "Pendidikan Calon Pegawai Muda: education program that leads to a permanent position at Bank Indonesia.",
+      "eligibility": [
+        "S1 max. age 26 / S2 max. age 28 (Angkatan 41 rules)",
+        "GPA ≥ 3.00"
+      ],
+      "benefit": "Permanent position after the program",
+      "usual_schedule": "About once a year (2026: August)",
+      "window": {"from": "2026-08-09", "until": "2026-08-14", "label": "PCPM Angkatan 41", "batch": 41},
+      "checked": "2026-11-12",
+      "sources": ["https://www.bi.go.id/id/karier/Pages/Seleksi-Penerimaan-PCPM-Angkatan-41.aspx"]
+    }
+  ]
+}
