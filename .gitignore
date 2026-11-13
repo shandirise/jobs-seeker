@@ -1,0 +1,20 @@
+# Data hasil scraping: dibuat ulang setiap kali scraper jalan, dan berisi data pribadi
+# (nama / email recruiter), jadi tidak pernah di-commit. Contoh data ada di site/sample/.
+site/data/
+site/jobs.js
+scraper/cache.json
+scraper/history.json
+scraper/seen.json
+scraper/last_run.log
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
