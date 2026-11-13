@@ -1,0 +1,857 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Java Tech Jobs</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #ffffff; --text: #1b1f24; --muted: #5f6b7a; --line: #e2e6eb;
+    --accent: #2457c5; --on-accent: #ffffff; --chip: #eef2f8;
+    --good: #1f8a4c; --good-bg: #e3f4ea; --mid: #a86500; --mid-bg: #fdf0db; --low: #6b7280; --low-bg: #eceef1; --bad: #b42318; --bad-bg: #fde8e7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111418; --card: #1a1f25; --text: #e7eaee; --muted: #9aa5b1; --line: #2b323a;
+      --accent: #7aa2ff; --on-accent: #0d1420; --chip: #232a33;
+      --good: #4cc27f; --good-bg: #173326; --mid: #f0b14a; --mid-bg: #3a2c12; --low: #a3abb5; --low-bg: #262c33; --bad: #ff8a80; --bad-bg: #3b1715;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  body:has(dialog[open]) { overflow: hidden; }
+  a { color: var(--accent); }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 24px 16px 48px; }
+  h1 { font-size: 24px; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 16px; }
+  details.how { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; }
+  details.how summary { cursor: pointer; font-weight: 600; }
+  details.how table { border-collapse: collapse; margin: 8px 0; font-size: 14px; }
+  details.how td, details.how th { border-bottom: 1px solid var(--line); padding: 4px 12px 4px 0; text-align: left; vertical-align: top; }
+  .filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; background: var(--card);
+             border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+  .filters label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); }
+  .filters input[type=search], .filters select { font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line);
+             border-radius: 6px; padding: 6px 8px; }
+  .filters .check { flex-direction: row; align-items: center; gap: 6px; font-size: 14px; color: var(--text); }
+  .count { color: var(--muted); margin: 4px 2px 10px; font-size: 14px; }
+  .job { display: flex; gap: 14px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px;
+         margin-bottom: 10px; cursor: pointer; }
+  .job:hover, .job:focus-visible { border-color: var(--accent); outline: none; }
+  .score { flex: 0 0 64px; height: 64px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 700; font-size: 22px; }
+  .score small { font-size: 10px; font-weight: 500; opacity: .8; }
+  .s-good { color: var(--good); background: var(--good-bg); } .s-mid { color: var(--mid); background: var(--mid-bg); } .s-low { color: var(--low); background: var(--low-bg); }
+  .body { flex: 1; min-width: 0; }
+  .title { font-weight: 600; font-size: 16px; color: var(--accent); }
+  .line { color: var(--muted); font-size: 14px; margin-top: 2px; overflow-wrap: anywhere; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+  .chip { background: var(--chip); border-radius: 999px; padding: 2px 9px; font-size: 12px; }
+  .chip.remote, .chip.agency { background: var(--mid-bg); color: var(--mid); }
+  .chip.new { background: var(--accent); color: var(--on-accent); font-weight: 600; }
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 4px 16px; font-size: 13px; }
+  .facts b { font-weight: 600; }
+  .why { color: var(--muted); font-size: 12px; margin-top: 6px; overflow-wrap: anywhere; }
+  .more { display: block; margin: 16px auto; font: inherit; padding: 8px 18px; border-radius: 8px; border: 1px solid var(--line); background: var(--card); color: var(--text); cursor: pointer; }
+  .sources { margin-top: 28px; font-size: 13px; color: var(--muted); }
+  .sources table { border-collapse: collapse; }
+  .sources td, .sources th { padding: 2px 14px 2px 0; text-align: left; }
+  .empty { text-align: center; color: var(--muted); padding: 40px 0; }
+
+  /* Tabs + application tracking */
+  .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin: 0 0 16px; }
+  .tab { font: inherit; font-weight: 600; background: none; border: 0; border-bottom: 2px solid transparent; color: var(--muted);
+         padding: 8px 14px; cursor: pointer; margin-bottom: -1px; }
+  .tab.active { color: var(--text); border-bottom-color: var(--accent); }
+  select.track { font: inherit; font-size: 13px; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 3px 6px; }
+  select.track.on { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+  .apps-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 14px; font-size: 14px; color: var(--muted); }
+  .apps-bar button, .apps-bar label { font: inherit; font-size: 14px; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--line);
+         background: var(--card); color: var(--text); cursor: pointer; }
+  h2.group { font-size: 15px; margin: 18px 0 8px; }
+  h2.group span { color: var(--muted); font-weight: 500; }
+
+  /* Programs tab */
+  .prog { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+  .prog-head { display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; }
+  .prog-head h3 { margin: 0; font-size: 17px; flex: 1; min-width: 200px; }
+  .badge { border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+  .st-open { background: var(--good-bg); color: var(--good); }
+  .st-upcoming { background: var(--mid-bg); color: var(--mid); }
+  .st-closed, .st-unknown { background: var(--low-bg); color: var(--low); }
+  .prog p { margin: 6px 0; font-size: 14px; }
+  .prog ul { margin: 4px 0 8px; padding-left: 20px; font-size: 14px; }
+  .live { background: var(--bg); border-radius: 8px; padding: 8px 10px; font-size: 13px; margin-top: 8px; overflow-wrap: anywhere; }
+  .live details { margin-top: 6px; }
+  .live summary { cursor: pointer; color: var(--accent); }
+  table.items { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 13px; }
+  table.items td, table.items th { text-align: left; padding: 4px 8px 4px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .table-wrap { overflow-x: auto; }
+
+  /* Detail popup */
+  dialog { width: min(880px, calc(100vw - 24px)); max-height: calc(100vh - 32px); padding: 0; border: 1px solid var(--line);
+           border-radius: 12px; background: var(--card); color: var(--text); }
+  dialog::backdrop { background: rgba(0, 0, 0, .55); }
+  .d-inner { padding: 20px 22px 26px; }
+  .d-head { display: flex; gap: 14px; align-items: flex-start; }
+  .d-head h2 { margin: 0; font-size: 20px; line-height: 1.3; }
+  .d-close { margin-left: auto; font: inherit; font-size: 22px; line-height: 1; background: none; border: 0; color: var(--muted); cursor: pointer; padding: 4px 8px; }
+  .d-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 4px; }
+  .btn { display: inline-block; padding: 7px 14px; border-radius: 8px; background: var(--accent); color: var(--on-accent); text-decoration: none; font-weight: 600; font-size: 14px; }
+  .btn.ghost { background: var(--chip); color: var(--text); font-weight: 500; }
+  .d-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .d-sec { margin-top: 18px; }
+  .d-sec h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 0 0 8px; }
+  dl.kv { display: grid; grid-template-columns: max-content 1fr; gap: 4px 14px; margin: 0; font-size: 14px; }
+  dl.kv dt { color: var(--muted); }
+  dl.kv dd { margin: 0; overflow-wrap: anywhere; }
+  ol.timeline { list-style: none; margin: 0; padding: 0 0 0 14px; border-left: 2px solid var(--line); font-size: 14px; }
+  ol.timeline li { position: relative; padding: 0 0 10px 10px; }
+  ol.timeline li::before { content: ""; position: absolute; left: -21px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+  ol.timeline li.future::before { background: var(--mid); }
+  ol.timeline .when { color: var(--muted); font-size: 12px; }
+  .text { white-space: pre-wrap; font-size: 14px; overflow-wrap: anywhere; }
+  .steps { margin: 0; padding-left: 20px; font-size: 14px; }
+  @media (max-width: 640px) {
+    .job { flex-direction: column; } .score { flex-direction: row; gap: 6px; height: auto; padding: 6px; }
+    .d-grid { grid-template-columns: 1fr; } .d-head .score { display: none; }
+  }
+
+  /* Reminders, hide button, score weights */
+  .chip.urgent { background: var(--bad-bg); color: var(--bad); font-weight: 600; }
+  .notice { background: var(--bad-bg); color: var(--bad); border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; font-size: 14px; font-weight: 600; }
+  .muted { color: var(--muted); }
+  .hide-btn { font: inherit; font-size: 12px; padding: 3px 8px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg); color: var(--muted); cursor: pointer; }
+  .hide-btn:hover { color: var(--text); }
+  .weights { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; margin: 10px 0 4px; font-size: 14px; }
+  .weights label { display: flex; align-items: center; gap: 8px; }
+  .weights b { min-width: 36px; }
+  .weights button { font: inherit; font-size: 13px; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg); color: var(--text); cursor: pointer; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Java Tech Jobs</h1>
+  <p class="sub" id="sub">Software engineering jobs on Java island, ranked by how easy they are to get as a fresh graduate. Click a job for full details.</p>
+
+  <details class="how">
+    <summary>How the score works (0–100) · adjust the weights</summary>
+    <table>
+      <tr><th>Part</th><th>Points</th></tr>
+      <tr><td>Experience required</td><td>0 yr / fresh grad / intern = full · 1 yr = 75% · 2 yr = 42% · 3 yr = 17% · 4+ yr = 0 · unknown = 50%.<br>
+        Taken from the listing's own field, otherwise from the description ("minimal 2 tahun", "3+ years"), otherwise guessed from the title (Intern/Junior/Senior/Lead).</td></tr>
+      <tr><td>Competition</td><td>Applicants (or bids) ≤25 = full · ≤50 = 80% · ≤100 = 56% · ≤200 = 32% · more = 12% · unknown = 48%.<br>
+        Only LinkedIn, Dealls and Freelancer.com show these counts.</td></tr>
+      <tr><td>Freshness</td><td>Posted ≤3 days ago = full · ≤7 = 80% · ≤14 = 53% · ≤30 = 27% · older = 0 · unknown = 47% (counted on the day the data was collected).</td></tr>
+    </table>
+    <div class="weights">
+      <label>Experience <input type="range" id="w-experience" min="0" max="100" step="5"> <b id="w-experience-v"></b></label>
+      <label>Competition <input type="range" id="w-competition" min="0" max="100" step="5"> <b id="w-competition-v"></b></label>
+      <label>Freshness <input type="range" id="w-freshness" min="0" max="100" step="5"> <b id="w-freshness-v"></b></label>
+      <button id="w-reset" type="button">Reset to 60 / 25 / 15</button>
+    </div>
+    <p class="why">Weights are relative (they are scaled to add up to 100) and saved in this browser. They apply to the Jobs and Remote tabs.</p>
+  </details>
+
+  <nav class="tabs">
+    <button class="tab active" id="tab-btn-jobs">Jobs</button>
+    <button class="tab" id="tab-btn-remote">Remote &amp; freelance <span id="remote-count"></span></button>
+    <button class="tab" id="tab-btn-programs">Programs <span id="programs-count"></span></button>
+    <button class="tab" id="tab-btn-apps">My applications <span id="apps-count"></span></button>
+  </nav>
+
+  <section id="tab-jobs">
+  <div class="filters">
+    <label>Search<input type="search" id="q" placeholder="title or company…"></label>
+    <label>Role<select id="category"><option value="">All roles</option></select></label>
+    <label>Province<select id="province"><option value="">All of Java</option></select></label>
+    <label>Max experience
+      <select id="exp">
+        <option value="">Any</option>
+        <option value="0">Fresh grad (0 yr)</option>
+        <option value="1">≤ 1 year</option>
+        <option value="2">≤ 2 years</option>
+        <option value="unknown">Not stated + ≤ 1 year</option>
+      </select></label>
+    <label>Source<select id="source"><option value="">All sources</option></select></label>
+    <label>Posted within
+      <select id="age">
+        <option value="">Any time</option>
+        <option value="3">3 days</option>
+        <option value="7">7 days</option>
+        <option value="14">14 days</option>
+        <option value="30">30 days</option>
+        <option value="60">60 days</option>
+      </select></label>
+    <label>Application deadline
+      <select id="deadline">
+        <option value="">Any</option>
+        <option value="7">Closes within 7 days</option>
+        <option value="14">Closes within 14 days</option>
+        <option value="30">Closes within 30 days</option>
+        <option value="open">Has a deadline, still open</option>
+      </select></label>
+    <label>Salary (top of range) at least
+      <select id="salary" class="salary-select"><option value="">Any</option></select></label>
+    <label>Sort by
+      <select id="sort">
+        <option value="score">Easiest first</option>
+        <option value="posted">Newest first</option>
+        <option value="applicants">Fewest applicants</option>
+        <option value="deadline">Deadline soonest</option>
+        <option value="salary">Highest salary</option>
+      </select></label>
+    <label class="check"><input type="checkbox" id="onlyNew"> Only new since last update</label>
+    <label class="check"><input type="checkbox" id="hideAgency"> Hide agency / outsourcing</label>
+    <label class="check"><input type="checkbox" id="hideRemote"> Hide remote / no-city jobs</label>
+    <label class="check"><input type="checkbox" id="showTracked"> Also show jobs I'm tracking</label>
+    <label class="check"><input type="checkbox" id="showHidden"> Show jobs I hid</label>
+  </div>
+
+  <div class="count" id="count"></div>
+  <div id="list"></div>
+  <button class="more" id="more" hidden>Show more</button>
+
+  <div class="sources" id="sources"></div>
+  </section>
+
+  <section id="tab-remote" hidden>
+    <p class="sub" id="remote-sub">Remote jobs and freelance projects from anywhere in the world that accept people living in Indonesia
+      (worldwide, Asia-Pacific, or Indonesia in their country list) and need only English. All IT roles.
+      For freelance projects the number of bids counts as competition. Pay in Rupiah uses the day's exchange rate
+      (hourly × 160 h, yearly ÷ 12).</p>
+    <div class="filters">
+      <label>Search<input type="search" id="r-q" placeholder="title or company…"></label>
+      <label>Type
+        <select id="r-kind">
+          <option value="">Remote jobs + freelance</option>
+          <option value="Remote job">Remote jobs</option>
+          <option value="Freelance project">Freelance projects</option>
+        </select></label>
+      <label>Role<select id="r-category"><option value="">All IT roles</option></select></label>
+      <label>Who can apply<select id="r-region"><option value="">Any (all accept Indonesia)</option></select></label>
+      <label>Max experience
+        <select id="r-exp">
+          <option value="">Any</option>
+          <option value="0">Fresh grad (0 yr)</option>
+          <option value="1">≤ 1 year</option>
+          <option value="2">≤ 2 years</option>
+          <option value="unknown">Not stated + ≤ 1 year</option>
+        </select></label>
+      <label>Salary per month at least (remote jobs)
+        <select id="r-salary" class="salary-select"><option value="">Any</option></select></label>
+      <label>Source<select id="r-source"><option value="">All sources</option></select></label>
+      <label>Sort by
+        <select id="r-sort">
+          <option value="score">Easiest first</option>
+          <option value="posted">Newest first</option>
+          <option value="applicants">Fewest applicants / bids</option>
+          <option value="salary">Highest salary</option>
+        </select></label>
+      <label class="check"><input type="checkbox" id="r-showTracked"> Also show jobs I'm tracking</label>
+      <label class="check"><input type="checkbox" id="r-showHidden"> Show jobs I hid</label>
+    </div>
+    <div class="count" id="r-count"></div>
+    <div id="remote-list"><div class="empty">Loading remote listings…</div></div>
+    <button class="more" id="r-more" hidden>Show more</button>
+  </section>
+
+  <section id="tab-programs" hidden>
+    <p class="sub">Seasonal and annual recruitment programs. Status comes from a live check of the official site where it can be read,
+      otherwise from the last known dates in <code>scraper/programs.json</code>. Always confirm on the official site before applying.</p>
+    <div id="programs-list"><div class="empty">Loading programs…</div></div>
+  </section>
+
+  <section id="tab-apps" hidden>
+    <div class="apps-bar">
+      <button id="export">Export backup</button>
+      <label>Import backup<input type="file" id="import" accept=".json,application/json" hidden></label>
+      <span id="apps-msg">Saved in this browser only. Export a backup now and then.</span>
+    </div>
+    <div id="apps-alerts"></div>
+    <div id="apps-list"></div>
+  </section>
+</div>
+
+<dialog id="detail" aria-labelledby="d-title"><div class="d-inner" id="d-body"></div></dialog>
+
+<script src="data/jobs.js"></script>
+<script>
+(async function () {
+  // ---------------------------------------------------------------------------
+  // Data. data/jobs.js is loaded up front (small: no descriptions). Descriptions and the other
+  // tabs are loaded in the background after the first render, so the page shows up quickly.
+  // Without data/ (fresh clone, scraper not run yet) the page uses the small example in sample/.
+  // ---------------------------------------------------------------------------
+  let BASE = "data/";
+  if (!window.JOBS_DATA) {
+    BASE = "sample/";
+    await loadScript(BASE + "jobs.js");
+  }
+  const JOBS = window.JOBS_DATA || { jobs: [], sources: {}, generated: null };
+  const jobs = JOBS.jobs;
+  let remoteJobs = [];
+  let programs = [];
+  const DETAILS = {};
+  const loaded = { remote: false, programs: false };
+  const PAGE = 60;
+  const REMIND_DAYS = 3;
+  const SALARY_STEPS = [3, 5, 8, 10, 15, 20, 30, 50];
+  let shown = PAGE, remoteShown = PAGE;
+  const $ = (id) => document.getElementById(id);
+
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const safeUrl = (u) => {
+    u = String(u || "").trim();
+    if (u && !/^[a-z]+:/i.test(u)) u = "https://" + u;
+    return /^https?:\/\//i.test(u) ? esc(u) : "#";
+  };
+  const generated = JOBS.generated ? new Date(JOBS.generated) : null;
+
+  function loadScript(src) {
+    return new Promise((resolve) => {
+      const s = document.createElement("script");
+      s.src = src;
+      s.onload = () => resolve(true);
+      s.onerror = () => resolve(false);
+      document.head.appendChild(s);
+    });
+  }
+  const store = {
+    get(key, fallback) { try { return JSON.parse(localStorage.getItem(key) || "null") || fallback; } catch (e) { return fallback; } },
+    set(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); return true; } catch (e) { return false; } },
+  };
+
+  // ---------------------------------------------------------------------------
+  // Dates and text helpers
+  // ---------------------------------------------------------------------------
+  function dayDiff(dateStr) {
+    if (!dateStr) return null;
+    const ref = new Date(); ref.setHours(0, 0, 0, 0);
+    return Math.round((new Date(dateStr + "T00:00:00") - ref) / 86400000);  // negative = past
+  }
+  function relative(dateStr) {
+    const d = dayDiff(dateStr);
+    if (d === null) return "unknown";
+    if (d === 0) return "today";
+    if (d === -1) return "yesterday";
+    if (d === 1) return "tomorrow";
+    const n = Math.abs(d), unit = n < 60 ? n + " days" : Math.round(n / 30) + " months";
+    return d < 0 ? unit + " ago" : "in " + unit;
+  }
+  const postedText = (s) => s ? relative(s) + " (" + s + ")" : "unknown";
+  const fmtDate = (s) => s ? new Date(s + "T00:00:00").toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }) : "";
+  function expText(j) {
+    if (j.exp_years === null || j.exp_years === undefined) return "not stated";
+    if (j.exp_years === 0) return "0 yr (fresh grad OK)";
+    return "min " + j.exp_years + " yr";
+  }
+  const isFreelance = (j) => j.kind === "Freelance project";
+
+  // ---------------------------------------------------------------------------
+  // Keys: a job may have older keys ("aliases") from earlier versions; saved tracking / hidden
+  // entries under an old key are moved to the current one.
+  // ---------------------------------------------------------------------------
+  const byKey = new Map();
+  function indexJobs(list) {
+    list.forEach((j) => {
+      byKey.set(j.key, j);
+      (j.aliases || []).forEach((a) => { if (!byKey.has(a)) byKey.set(a, j); });
+    });
+  }
+  function migrateKeys(saved) {
+    let changed = false;
+    Object.keys(saved).forEach((k) => {
+      const j = byKey.get(k);
+      if (j && j.key !== k && !saved[j.key]) { saved[j.key] = saved[k]; delete saved[k]; changed = true; }
+    });
+    return changed;
+  }
+  indexJobs(jobs);
+
+  // ---------------------------------------------------------------------------
+  // Score weights (saved in this browser)
+  // ---------------------------------------------------------------------------
+  const PARTS = [["experience", 60], ["competition", 25], ["freshness", 15]];
+  const DEFAULT_W = { experience: 60, competition: 25, freshness: 15 };
+  let weights = Object.assign({}, DEFAULT_W, store.get("javaTechJobs.weights.v1", {}));
+  const weightTotal = () => PARTS.reduce((s, [p]) => s + Number(weights[p]), 0) || 1;
+  function scoreOf(j) {
+    if (!j.parts) return j.score || 0;
+    return Math.round(PARTS.reduce((s, [p, max]) => s + (j.parts[p] / max) * weights[p], 0) * 100 / weightTotal());
+  }
+  function partsText(j) {
+    const total = weightTotal();
+    return PARTS.map(([p, max]) => p + " " + Math.round((j.parts[p] / max) * weights[p] * 100 / total) + "/" + Math.round(weights[p] * 100 / total)).join(" · ");
+  }
+  function rescore() { jobs.concat(remoteJobs).forEach((j) => { j.s = scoreOf(j); }); }
+  const scoreClass = (s) => s >= 70 ? "s-good" : s >= 40 ? "s-mid" : "s-low";
+  function showWeights() {
+    const total = weightTotal();
+    PARTS.forEach(([p]) => { $("w-" + p).value = weights[p]; $("w-" + p + "-v").textContent = Math.round(weights[p] * 100 / total) + "%"; });
+  }
+  PARTS.forEach(([p]) => $("w-" + p).addEventListener("input", (e) => {
+    weights[p] = Number(e.target.value);
+    store.set("javaTechJobs.weights.v1", weights);
+    showWeights(); rescore(); render(); renderRemote(); renderApps();
+  }));
+  $("w-reset").addEventListener("click", () => {
+    weights = Object.assign({}, DEFAULT_W);
+    store.set("javaTechJobs.weights.v1", weights);
+    showWeights(); rescore(); render(); renderRemote(); renderApps();
+  });
+
+  // ---------------------------------------------------------------------------
+  // Application tracking + hidden jobs (both saved in this browser)
+  // ---------------------------------------------------------------------------
+  const STATUSES = [["applied", "Applied"], ["interview", "Interview"], ["accepted", "Accepted"], ["rejected", "Rejected"]];
+  const STATUS_LABEL = Object.fromEntries(STATUSES);
+  const GROUP_ORDER = ["interview", "applied", "accepted", "rejected"];
+  const TRACK_KEY = "javaTechJobs.tracking.v1", HIDDEN_KEY = "javaTechJobs.hidden.v1";
+  let tracking = store.get(TRACK_KEY, {});
+  let hidden = store.get(HIDDEN_KEY, {});
+  function saveTracking() { if (!store.set(TRACK_KEY, tracking)) $("apps-msg").textContent = "Could not save in this browser — use Export backup."; }
+  function migrateSaved() {
+    if (migrateKeys(tracking)) saveTracking();
+    if (migrateKeys(hidden)) store.set(HIDDEN_KEY, hidden);
+  }
+  migrateSaved();
+  const snapshot = (j) => ({ title: j.title, company: j.company, location: j.location, province: j.province, url: j.url, source: j.source });
+  function refreshLists() { render(); renderRemote(); renderApps(); }
+  function setStatus(key, status) {
+    const job = byKey.get(key) || (tracking[key] && tracking[key].job);
+    if (!job) return;
+    if (!status) delete tracking[key];
+    else tracking[key] = { status, updated: new Date().toISOString(), job: snapshot(job) };
+    saveTracking();
+    refreshLists();
+  }
+  function setHidden(key, on) {
+    const job = byKey.get(key);
+    if (on && job) hidden[key] = { title: job.title, company: job.company, at: new Date().toISOString() };
+    else delete hidden[key];
+    store.set(HIDDEN_KEY, hidden);
+    refreshLists();
+  }
+  function statusSelect(key) {
+    const cur = tracking[key] ? tracking[key].status : "";
+    return '<select class="track' + (cur ? " on" : "") + '" data-key="' + esc(key) + '" aria-label="Application status">' +
+      '<option value="">' + (cur ? "Stop tracking" : "Track…") + "</option>" +
+      STATUSES.map(([v, l]) => '<option value="' + v + '"' + (cur === v ? " selected" : "") + ">" + l + "</option>").join("") + "</select>";
+  }
+  const hideButton = (key) => '<button class="hide-btn" type="button" data-key="' + esc(key) + '">' + (hidden[key] ? "Unhide" : "Not interested") + "</button>";
+
+  // ---------------------------------------------------------------------------
+  // Shared card + filters
+  // ---------------------------------------------------------------------------
+  function fillSelect(id, values) {
+    const sel = $(id);
+    [...new Set(values)].filter(Boolean).sort().forEach((v) => { const o = document.createElement("option"); o.value = v; o.textContent = v; sel.appendChild(o); });
+  }
+  document.querySelectorAll(".salary-select").forEach((sel) => SALARY_STEPS.forEach((n) => {
+    const o = document.createElement("option"); o.value = n * 1e6; o.textContent = "Rp " + n + " jt"; sel.appendChild(o);
+  }));
+  function expOk(j, exp) {
+    if (exp === "unknown") return j.exp_years === null || j.exp_years === undefined || j.exp_years <= 1;
+    return exp === "" || (j.exp_years !== null && j.exp_years !== undefined && j.exp_years <= Number(exp));
+  }
+  function sortList(list, sort) {
+    const open = (j) => { const d = dayDiff(j.deadline); return d === null || d < 0 ? 1e9 : d; };
+    if (sort === "posted") list.sort((a, b) => (b.posted || "").localeCompare(a.posted || ""));
+    else if (sort === "applicants") list.sort((a, b) => (a.applicants ?? 1e9) - (b.applicants ?? 1e9) || b.s - a.s);
+    else if (sort === "deadline") list.sort((a, b) => open(a) - open(b) || b.s - a.s);
+    else if (sort === "salary") list.sort((a, b) => (b.salary_max ?? -1) - (a.salary_max ?? -1) || b.s - a.s);
+    else list.sort((a, b) => b.s - a.s || (b.posted || "").localeCompare(a.posted || ""));
+    return list;
+  }
+  function chips(j) {
+    return '<div class="chips">' + (j.new ? '<span class="chip new">NEW</span>' : "") +
+      (j.kind ? '<span class="chip">' + esc(j.kind) + "</span>" : "") +
+      '<span class="chip">' + esc(j.category) + '</span><span class="chip">' + esc(j.province) + "</span>" +
+      (j.remote ? '<span class="chip remote">Remote</span>' : "") +
+      (j.agency ? '<span class="chip agency" title="' + esc(j.agency) + '">Agency / outsourcing?</span>' : "") +
+      (hidden[j.key] ? '<span class="chip">Hidden</span>' : "") +
+      '<span class="chip">' + esc(j.source) + "</span></div>";
+  }
+  function payText(j) {
+    if (!j.salary) return "";
+    return "<div><b>" + (isFreelance(j) ? "Budget" : "Salary") + ":</b> " + esc(j.salary) +
+      (j.salary_idr ? ' <span class="muted">(' + esc(j.salary_idr) + ")</span>" : "") + "</div>";
+  }
+  function card(j) {
+    return '<article class="job" tabindex="0" data-key="' + esc(j.key) + '">' +
+      '<div class="score ' + scoreClass(j.s) + '" title="Ease score">' + j.s + "<small>/ 100</small></div>" +
+      '<div class="body">' +
+        '<div class="title">' + esc(j.title) + "</div>" +
+        '<div class="line">' + esc(j.company) + " · " + esc(j.location || j.province) + "</div>" +
+        chips(j) +
+        '<div class="facts">' +
+          "<div><b>Experience:</b> " + esc(expText(j)) + "</div>" +
+          "<div><b>" + (isFreelance(j) ? "Bids" : "Applicants") + ":</b> " + esc(j.applicants ?? "unknown") +
+            (j.applicants_history ? ' <span class="muted">(was ' + esc(j.applicants_history[0][1]) + " on " + esc(fmtDate(j.applicants_history[0][0])) + ")</span>" : "") + "</div>" +
+          "<div><b>Posted:</b> " + esc(postedText(j.posted)) + "</div>" +
+          (j.deadline ? "<div><b>Deadline:</b> " + esc(postedText(j.deadline)) + "</div>" : "") +
+          payText(j) +
+        "</div>" +
+        '<div class="why">' + statusSelect(j.key) + " " + hideButton(j.key) + " · Score: " + partsText(j) + " · " +
+          '<a href="' + safeUrl(j.url) + '" target="_blank" rel="noopener">Open listing ↗</a></div>' +
+      "</div></article>";
+  }
+
+  // ---------------------------------------------------------------------------
+  // Jobs tab
+  // ---------------------------------------------------------------------------
+  fillSelect("category", jobs.map((j) => j.category));
+  fillSelect("province", jobs.map((j) => j.province));
+  fillSelect("source", jobs.map((j) => j.source));
+  function render() {
+    const q = $("q").value.trim().toLowerCase();
+    const cat = $("category").value, prov = $("province").value, src = $("source").value, exp = $("exp").value;
+    const age = $("age").value, deadline = $("deadline").value, salary = Number($("salary").value || 0);
+    const hideRemote = $("hideRemote").checked, hideAgency = $("hideAgency").checked, onlyNew = $("onlyNew").checked;
+    const showTracked = $("showTracked").checked, showHidden = $("showHidden").checked;
+    let hiddenCount = 0;
+    const list = jobs.filter((j) => {
+      if (!showTracked && tracking[j.key]) return false;  // tracked jobs live in the "My applications" tab
+      if (hidden[j.key] && !showHidden) { hiddenCount++; return false; }
+      if (q && !(j.title + " " + j.company).toLowerCase().includes(q)) return false;
+      if (cat && j.category !== cat) return false;
+      if (prov && j.province !== prov) return false;
+      if (src && j.source !== src && !(j.also || []).some((a) => a.source === src)) return false;
+      if (hideRemote && j.province === "Remote / unspecified") return false;
+      if (hideAgency && j.agency) return false;
+      if (onlyNew && !j.new) return false;
+      if (!expOk(j, exp)) return false;
+      if (age) { const d = dayDiff(j.posted); if (d === null || -d > Number(age)) return false; }
+      if (deadline) {
+        const d = dayDiff(j.deadline);
+        if (d === null || d < 0) return false;
+        if (deadline !== "open" && d > Number(deadline)) return false;
+      }
+      if (salary && !(j.salary_max >= salary)) return false;
+      return true;
+    });
+    sortList(list, $("sort").value);
+    $("count").textContent = list.length + " of " + jobs.length + " jobs" + (hiddenCount ? " · " + hiddenCount + " hidden" : "");
+    $("list").innerHTML = list.length ? list.slice(0, shown).map(card).join("") : '<div class="empty">No jobs match these filters.</div>';
+    $("more").hidden = list.length <= shown;
+  }
+  ["q", "category", "province", "exp", "source", "age", "deadline", "salary", "sort", "onlyNew", "hideAgency", "hideRemote", "showTracked", "showHidden"]
+    .forEach((id) => $(id).addEventListener("input", () => { shown = PAGE; render(); }));
+  $("more").addEventListener("click", () => { shown += PAGE; render(); });
+
+  // ---------------------------------------------------------------------------
+  // Remote & freelance tab
+  // ---------------------------------------------------------------------------
+  function renderRemote() {
+    if (!loaded.remote) return;
+    const q = $("r-q").value.trim().toLowerCase(), kind = $("r-kind").value, cat = $("r-category").value;
+    const reg = $("r-region").value, src = $("r-source").value, exp = $("r-exp").value, salary = Number($("r-salary").value || 0);
+    const showTracked = $("r-showTracked").checked, showHidden = $("r-showHidden").checked;
+    let hiddenCount = 0;
+    const list = remoteJobs.filter((j) => {
+      if (!showTracked && tracking[j.key]) return false;
+      if (hidden[j.key] && !showHidden) { hiddenCount++; return false; }
+      if (q && !(j.title + " " + j.company).toLowerCase().includes(q)) return false;
+      if (kind && j.kind !== kind) return false;
+      if (cat && j.category !== cat) return false;
+      if (reg && j.region !== reg) return false;
+      if (src && j.source !== src && !(j.also || []).some((a) => a.source === src)) return false;
+      if (!expOk(j, exp)) return false;
+      if (salary && !(j.salary_max >= salary)) return false;
+      return true;
+    });
+    sortList(list, $("r-sort").value);
+    $("remote-count").textContent = remoteJobs.length ? "(" + remoteJobs.length + ")" : "";
+    $("r-count").textContent = list.length + " of " + remoteJobs.length + " listings" + (hiddenCount ? " · " + hiddenCount + " hidden" : "");
+    $("remote-list").innerHTML = list.length ? list.slice(0, remoteShown).map(card).join("")
+      : '<div class="empty">' + (remoteJobs.length ? "No listings match these filters." : "No remote data yet. Run <code>python scraper/remote.py</code>.") + "</div>";
+    $("r-more").hidden = list.length <= remoteShown;
+  }
+  ["r-q", "r-kind", "r-category", "r-region", "r-exp", "r-salary", "r-source", "r-sort", "r-showTracked", "r-showHidden"]
+    .forEach((id) => $(id).addEventListener("input", () => { remoteShown = PAGE; renderRemote(); }));
+  $("r-more").addEventListener("click", () => { remoteShown += PAGE; renderRemote(); });
+
+  // ---------------------------------------------------------------------------
+  // My applications tab (with deadline reminders)
+  // ---------------------------------------------------------------------------
+  function reminder(key, live) {
+    if (!live) {
+      const waiting = key.startsWith("remote|") && !loaded.remote;
+      return waiting ? null : { level: "gone", text: "No longer in the latest data — it may be closed" };
+    }
+    const d = dayDiff(live.deadline);
+    if (d === null) return null;
+    if (d < 0) return { level: "passed", text: "Deadline passed " + relative(live.deadline) };
+    if (d <= REMIND_DAYS) return { level: "urgent", text: "Deadline " + relative(live.deadline) + " (" + live.deadline + ")" };
+    return null;
+  }
+  function renderApps() {
+    const entries = Object.entries(tracking);
+    let urgent = 0, gone = 0;
+    const rowsByStatus = {};
+    entries.forEach(([key, t]) => {
+      const live = byKey.get(key);
+      const r = ["rejected", "accepted"].includes(t.status) ? null : reminder(key, live);
+      if (r && r.level === "urgent") urgent++;
+      if (r && r.level === "gone") gone++;
+      (rowsByStatus[t.status] = rowsByStatus[t.status] || []).push([key, t, live, r]);
+    });
+    $("apps-count").textContent = entries.length ? "(" + entries.length + (urgent ? " · " + urgent + " due" : "") + ")" : "";
+    const alerts = [];
+    if (urgent) alerts.push(urgent + " application deadline" + (urgent > 1 ? "s" : "") + " within " + REMIND_DAYS + " days");
+    if (gone) alerts.push(gone + " tracked job" + (gone > 1 ? "s are" : " is") + " no longer listed");
+    $("apps-alerts").innerHTML = alerts.length ? '<div class="notice">⚠ ' + esc(alerts.join(" · ")) + "</div>" : "";
+    if (!entries.length) {
+      $("apps-list").innerHTML = '<div class="empty">No applications tracked yet. Use the “Track…” menu on any job.</div>';
+      return;
+    }
+    $("apps-list").innerHTML = GROUP_ORDER.map((status) => {
+      const rows = (rowsByStatus[status] || []).sort((a, b) =>
+        ((b[3] && b[3].level === "urgent") - (a[3] && a[3].level === "urgent")) || (b[1].updated || "").localeCompare(a[1].updated || ""));
+      if (!rows.length) return "";
+      return '<h2 class="group">' + esc(STATUS_LABEL[status]) + " <span>" + rows.length + "</span></h2>" + rows.map(([key, t, live, r]) => {
+        const j = live || t.job || {};
+        return '<article class="job" tabindex="0" data-key="' + esc(key) + '">' +
+          (live ? '<div class="score ' + scoreClass(live.s) + '">' + live.s + "<small>/ 100</small></div>" : '<div class="score s-low">–</div>') +
+          '<div class="body"><div class="title">' + esc(j.title) + "</div>" +
+          '<div class="line">' + esc(j.company) + " · " + esc(j.location || j.province) + "</div>" +
+          '<div class="chips">' + (r ? '<span class="chip ' + (r.level === "urgent" ? "urgent" : "agency") + '">' + esc(r.text) + "</span>" : "") +
+            '<span class="chip">' + esc(j.source) + "</span></div>" +
+          '<div class="why">' + statusSelect(key) + ' · <a href="' + safeUrl(j.url) + '" target="_blank" rel="noopener">Open listing ↗</a></div>' +
+          "</div></article>";
+      }).join("");
+    }).join("");
+  }
+
+  // ---------------------------------------------------------------------------
+  // Programs tab
+  // ---------------------------------------------------------------------------
+  const STATUS_TEXT = { open: "Open now", upcoming: "Upcoming", unknown: "Status unknown", closed: "Closed" };
+  const STATUS_ORDER = ["open", "upcoming", "unknown", "closed"];
+  function programCard(p) {
+    const w = p.window;
+    const windowText = w ? (w.label ? w.label + ": " : "") + [fmtDate(w.from), fmtDate(w.until)].filter(Boolean).join(" – ") : "";
+    const live = p.live;
+    let liveHtml = "";
+    if (live && !live.ok) {
+      liveHtml = '<div class="live">Live check failed (' + esc(live.error) + "). Showing the last known info.</div>";
+    } else if (live) {
+      const items = live.items || [];
+      const rows = items.map((i) => "<tr><td>" +
+        (i.url ? '<a href="' + safeUrl(i.url) + '" target="_blank" rel="noopener">' + esc(i.title) + "</a>" : esc(i.title)) +
+        (i.it ? ' <span class="chip new">IT</span>' : "") + "</td><td>" + esc(i.company) + "</td><td>" + esc(i.location) +
+        "</td><td>" + (i.deadline ? esc(postedText(i.deadline)) : "") + "</td><td>" + esc(i.applicants ?? "") + "</td><td>" + esc(i.note) + "</td></tr>").join("");
+      liveHtml = '<div class="live"><b>Live check</b> (' + esc(new Date(live.checked_at).toLocaleString()) + "): " + esc(live.headline) +
+        (items.length ? "<details><summary>" + esc(live.items_label || "Openings") + " (" + items.length + ")</summary>" +
+          '<div class="table-wrap"><table class="items"><tr><th>Position</th><th>Company</th><th>Location</th><th>Deadline</th><th>Applicants</th><th>Note</th></tr>' +
+          rows + "</table></div></details>" : "") + "</div>";
+    }
+    return '<article class="prog">' +
+      '<div class="prog-head"><h3><a href="' + safeUrl(p.url) + '" target="_blank" rel="noopener">' + esc(p.name) + " ↗</a></h3>" +
+        '<span class="badge st-' + esc(p.status) + '">' + esc(STATUS_TEXT[p.status] || p.status) + "</span></div>" +
+      '<div class="line">' + esc(p.organizer) + " · " + esc(p.category) + (p.status_basis ? " · status from " + esc(p.status_basis) : "") + "</div>" +
+      "<p>" + esc(p.summary) + "</p>" +
+      kv([["Latest known window", windowText], ["Usual schedule", p.usual_schedule], ["Benefit", p.benefit]]) +
+      (p.eligibility && p.eligibility.length ? "<p><b>Eligibility</b></p><ul>" + p.eligibility.map((e) => "<li>" + esc(e) + "</li>").join("") + "</ul>" : "") +
+      (p.note ? '<p class="why">' + esc(p.note) + "</p>" : "") +
+      liveHtml +
+      (p.sources && p.sources.length ? '<p class="why">Sources: ' + p.sources.map((s, i) => '<a href="' + safeUrl(s) + '" target="_blank" rel="noopener">[' + (i + 1) + "]</a>").join(" ") + "</p>" : "") +
+      "</article>";
+  }
+  function renderPrograms() {
+    if (!loaded.programs) return;
+    const list = programs.slice().sort((a, b) => STATUS_ORDER.indexOf(a.status) - STATUS_ORDER.indexOf(b.status));
+    $("programs-count").textContent = list.length ? "(" + list.filter((p) => p.status === "open").length + " open)" : "";
+    $("programs-list").innerHTML = list.length ? list.map(programCard).join("")
+      : '<div class="empty">No program data yet. Run <code>python scraper/programs.py</code>.</div>';
+  }
+
+  // ---------------------------------------------------------------------------
+  // Detail popup
+  // ---------------------------------------------------------------------------
+  function kv(rows) {
+    rows = rows.filter((r) => r[1] !== null && r[1] !== undefined && r[1] !== "");
+    return rows.length ? '<dl class="kv">' + rows.map((r) => "<dt>" + esc(r[0]) + "</dt><dd>" + (r[2] ? r[1] : esc(r[1])) + "</dd>").join("") + "</dl>" : "";
+  }
+  const sec = (title, inner) => inner ? '<section class="d-sec"><h3>' + esc(title) + "</h3>" + inner + "</section>" : "";
+  const chipList = (items) => items && items.length ? '<div class="chips">' + items.map((s) => '<span class="chip">' + esc(s) + "</span>").join("") + "</div>" : "";
+  const detailsLoading = {};
+
+  function renderDetail(j, d) {
+    const label = isFreelance(j) ? "Bids so far" : "Applicants";
+    const history = (j.applicants_history || []).map((p) => fmtDate(p[0]) + ": " + p[1]).join("  →  ");
+    const keyFacts = kv([
+      ["Experience required", expText(j)],
+      ["How we know", j.exp_basis],
+      [label, j.applicants ?? "unknown"],
+      [label + " over time", history || null],
+      [isFreelance(j) ? "Budget" : "Salary", j.salary],
+      ["In Rupiah", j.salary_idr],
+      ["Location", j.location],
+      ["Score", j.s + " — " + partsText(j)],
+      ["Agency / outsourcing?", j.agency ? "Possibly — " + j.agency : null],
+    ].concat(d ? d.facts || [] : []));
+
+    const timeline = ((d && d.timeline) || [])
+      .concat(j.first_seen ? [["First seen by the scraper", j.first_seen]] : [])
+      .concat(generated ? [["Data collected", generated.toISOString().slice(0, 10)]] : [])
+      .sort((a, b) => a[1].localeCompare(b[1]));
+    const timelineHtml = timeline.length ? '<ol class="timeline">' + timeline.map((t) =>
+      '<li class="' + (dayDiff(t[1]) > 0 ? "future" : "") + '"><div>' + esc(t[0]) + '</div><div class="when">' + esc(t[1]) + " · " + esc(relative(t[1])) + "</div></li>").join("") + "</ol>" : "";
+
+    let more = '<div class="why" style="margin-top:16px">Loading description…</div>';
+    if (d) {
+      const r = d.recruiter || {};
+      const email = r.email && /^[^\s@<>"]+@[^\s@<>"]+$/.test(r.email) ? '<a href="mailto:' + esc(r.email) + '">' + esc(r.email) + "</a>" : null;
+      const c = d.company || {};
+      const company = kv([
+        ["Name", j.company], ["Industry", c.industry], ["Sector", c.sector], ["Size", c.size], ["Funding stage", c["funding stage"]],
+        ["Working policy", c["working policy"]], ["Address", c.address],
+        ["Website", c.website ? '<a href="' + safeUrl(c.website) + '" target="_blank" rel="noopener">' + esc(c.website) + "</a>" : null, true],
+      ]) + (c.about ? '<div class="text" style="margin-top:8px">' + esc(c.about) + "</div>" : "");
+      more = sec("Recruiter", kv([["Name", r.name], ["Email", email, true]])) +
+        sec("Hiring steps", d.hiring_steps && d.hiring_steps.length ? '<ol class="steps">' + d.hiring_steps.map((s) => "<li>" + esc(s.replace(/^[•\-\s]+/, "")) + "</li>").join("") + "</ol>" : "") +
+        sec("Skills", chipList(d.skills)) +
+        sec("Benefits & highlights", chipList(d.benefits)) +
+        sec("Job description", d.description ? '<div class="text">' + esc(d.description) + "</div>" :
+          '<div class="why">No description was collected for this job. Open the listing to read it.</div>') +
+        sec("Company", company);
+    }
+    const also = (j.also || []).map((a) => '<a class="btn ghost" href="' + safeUrl(a.url) + '" target="_blank" rel="noopener">Also on ' + esc(a.source) + " ↗</a>").join("");
+    $("d-body").innerHTML =
+      '<div class="d-head"><div class="score ' + scoreClass(j.s) + '">' + j.s + "<small>/ 100</small></div>" +
+        '<div><h2 id="d-title">' + esc(j.title) + '</h2><div class="line">' + esc(j.company) + " · " + esc(j.location || j.province) + "</div>" + chips(j) + "</div>" +
+        '<button class="d-close" aria-label="Close" id="d-close">×</button></div>' +
+      '<div class="d-actions"><a class="btn" href="' + safeUrl(j.url) + '" target="_blank" rel="noopener">Open on ' + esc(j.source) + " ↗</a>" + also +
+        statusSelect(j.key) + hideButton(j.key) + "</div>" +
+      '<div class="d-grid">' + sec("Key facts", keyFacts) + sec("Timeline", timelineHtml) + "</div>" + more;
+    $("d-close").addEventListener("click", () => $("detail").close());
+  }
+  async function openDetail(j) {
+    const ready = j.key in DETAILS;
+    renderDetail(j, ready ? DETAILS[j.key] : null);
+    if (!$("detail").open) $("detail").showModal();
+    $("detail").scrollTop = 0;
+    if (!ready) {
+      await (j.key.startsWith("remote|") ? detailsLoading.remote : detailsLoading.jobs);
+      if ($("detail").open && $("d-title") && $("d-title").textContent === j.title) renderDetail(j, DETAILS[j.key] || {});
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Events
+  // ---------------------------------------------------------------------------
+  const TABS = { jobs: "#jobs", remote: "#remote", programs: "#programs", apps: "#applications" };
+  function showTab(name) {
+    Object.keys(TABS).forEach((t) => {
+      $("tab-" + t).hidden = t !== name;
+      $("tab-btn-" + t).classList.toggle("active", t === name);
+    });
+    try { history.replaceState(null, "", TABS[name]); } catch (e) { /* ignore */ }
+  }
+  Object.keys(TABS).forEach((t) => $("tab-btn-" + t).addEventListener("click", () => showTab(t)));
+
+  function cardFromEvent(e) {
+    if (e.target.closest("a, select, button, input, label")) return null;  // let links and controls work normally
+    const el = e.target.closest(".job");
+    return el ? byKey.get(el.dataset.key) || null : null;
+  }
+  ["list", "remote-list", "apps-list"].forEach((id) => {
+    $(id).addEventListener("click", (e) => { const j = cardFromEvent(e); if (j) openDetail(j); });
+    $(id).addEventListener("keydown", (e) => {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      const j = cardFromEvent(e);
+      if (j) { e.preventDefault(); openDetail(j); }
+    });
+  });
+  $("detail").addEventListener("click", (e) => { if (e.target === $("detail")) $("detail").close(); });  // click on backdrop
+  document.addEventListener("change", (e) => {
+    const sel = e.target.closest("select.track");
+    if (!sel) return;
+    setStatus(sel.dataset.key, sel.value);
+    if (sel.closest("dialog")) sel.outerHTML = statusSelect(sel.dataset.key);  // lists re-render themselves; the popup doesn't
+  });
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".hide-btn");
+    if (!btn) return;
+    const key = btn.dataset.key;
+    setHidden(key, !hidden[key]);
+    if (btn.closest("dialog")) btn.outerHTML = hideButton(key);
+  });
+
+  $("export").addEventListener("click", () => {
+    const blob = new Blob([JSON.stringify({ exported: new Date().toISOString(), tracking, hidden }, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "job-tracking-" + new Date().toISOString().slice(0, 10) + ".json";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    $("apps-msg").textContent = "Backup downloaded.";
+  });
+  $("import").addEventListener("change", async (e) => {
+    const file = e.target.files[0];
+    e.target.value = "";
+    if (!file) return;
+    try {
+      const data = JSON.parse(await file.text());
+      const incoming = data.tracking || data;
+      let n = 0;
+      for (const [key, t] of Object.entries(incoming)) {
+        if (t && STATUS_LABEL[t.status] && t.job && typeof t.job.title === "string") { tracking[key] = t; n++; }
+      }
+      for (const [key, h] of Object.entries(data.hidden || {})) {
+        if (h && typeof h.title === "string") hidden[key] = h;
+      }
+      migrateSaved(); saveTracking(); store.set(HIDDEN_KEY, hidden); refreshLists();
+      $("apps-msg").textContent = "Imported " + n + " applications.";
+    } catch (err) {
+      $("apps-msg").textContent = "That file is not a valid backup.";
+    }
+  });
+
+  // ---------------------------------------------------------------------------
+  // Start: show the jobs, then load the rest in the background
+  // ---------------------------------------------------------------------------
+  if (generated) $("sub").textContent += " Data collected " + generated.toLocaleString() + ".";
+  if (BASE === "sample/") {
+    $("sub").insertAdjacentHTML("afterend", '<div class="notice">Showing a small sample. Run <code>python scraper/scrape.py</code> to collect current jobs.</div>');
+  }
+  const rows = Object.entries(JOBS.sources || {}).map(([name, s]) =>
+    "<tr><td>" + esc(name) + "</td><td>" + s.fetched + "</td><td>" + s.kept + "</td><td>" + (s.ok ? "ok" : "error: " + esc(s.error)) + "</td></tr>").join("");
+  $("sources").innerHTML = jobs.length
+    ? "<b>Sources in this run</b><table><tr><th>Source</th><th>Fetched</th><th>Shown</th><th>Status</th></tr>" + rows + "</table>"
+    : "No data yet. Run <code>python scraper/scrape.py</code> to collect jobs.";
+  showWeights();
+  rescore();
+  render();
+  renderApps();
+  showTab(Object.keys(TABS).find((t) => TABS[t] === location.hash) || "jobs");
+
+  setTimeout(() => {
+    const remoteReady = loadScript(BASE + "remote.js").then(() => {
+      const data = window.REMOTE_DATA || {};
+      remoteJobs = data.jobs || [];
+      loaded.remote = true;
+      indexJobs(remoteJobs);
+      migrateSaved();
+      rescore();
+      fillSelect("r-category", remoteJobs.map((j) => j.category));
+      fillSelect("r-region", remoteJobs.map((j) => j.region));
+      fillSelect("r-source", remoteJobs.map((j) => j.source));
+      if (data.generated) $("remote-sub").textContent += " Collected " + new Date(data.generated).toLocaleString() + ".";
+      renderRemote();
+      renderApps();
+    });
+    loadScript(BASE + "programs.js").then(() => {
+      programs = (window.PROGRAMS_DATA || {}).programs || [];
+      loaded.programs = true;
+      renderPrograms();
+    });
+    detailsLoading.jobs = loadScript(BASE + "jobs-details.js").then(() => Object.assign(DETAILS, window.JOBS_DETAILS || {}));
+    detailsLoading.remote = remoteReady.then(() => loadScript(BASE + "remote-details.js"))
+      .then(() => Object.assign(DETAILS, window.REMOTE_DETAILS || {}));
+  }, 0);
+})();
+</script>
+</body>
+</html>
