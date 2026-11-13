@@ -1,0 +1,29 @@
+{
+  "_comment": "Company career pages on public job-board platforms. Key = the company's slug on that platform, value = display name. Add more companies here.",
+  "greenhouse": {
+    "xendit": "Xendit",
+    "straitsx": "StraitsX",
+    "jago": "Bank Jago"
+  },
+  "lever": {
+    "lalamove": "Lalamove",
+    "GoToGroup": "GoTo (Gojek, GoPay, Tokopedia)"
+  },
+  "smartrecruiters": {
+    "grab": "Grab",
+    "cermaticom": "Cermati",
+    "stockbit": "Stockbit",
+    "kataai": "Kata.ai",
+    "gudangada": "GudangAda",
+    "bukuwarung": "BukuWarung",
+    "sayurbox": "Sayurbox",
+    "julo": "JULO",
+    "pahamify": "Pahamify",
+    "pasarpolis": "PasarPolis",
+    "dekoruma": "Dekoruma",
+    "gdp": "GDP"
+  },
+  "workable": {
+    "ajaib": "Ajaib"
+  }
+}
